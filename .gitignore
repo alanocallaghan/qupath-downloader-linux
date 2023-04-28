@@ -1,0 +1,4 @@
+*.tmp
+v*
+*.tar.xz
+QuPath
