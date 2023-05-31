@@ -51,7 +51,7 @@ if latest:
     desktop=f"""
     [Desktop Entry]
     Encoding=UTF-8
-    Version=1.0
+    Version={version}
     Type=Application
     Terminal=false
     Exec={os.path.realpath(f"latest")}
