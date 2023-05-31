@@ -55,6 +55,7 @@ if latest:
     os.remove("latest")
     os.symlink(f"{version}/bin/QuPath", "latest")
     os.chmod("latest", 0o755)
+
     desktop = f"""
     [Desktop Entry]
     Encoding=UTF-8
