@@ -7,18 +7,25 @@ import wget
 import os
 
 parser = argparse.ArgumentParser(
-    prog = 'DownloadQuPath',
-    description = 'Download a specified version of QuPath'
+    prog="DownloadQuPath", description="Download a specified version of QuPath"
 )
-parser.add_argument('-v', '--version', default = "latest")
+parser.add_argument(
+    "-v",
+    "--version",
+    help="The version to download, eg v0.4.3, latest",
+    default="latest",
+)
 args = parser.parse_args()
 version = args.version
 
 print(f"Downloading QuPath, version: {version}")
 
-url = 'https://api.github.com/repos/qupath/qupath/releases'
-headers = {"X-GitHub-Api-Version": "2022-11-28", "Accept": "application/vnd.github+json"}
-res = requests.get(url, headers = headers)
+url = "https://api.github.com/repos/qupath/qupath/releases"
+headers = {
+    "X-GitHub-Api-Version": "2022-11-28",
+    "Accept": "application/vnd.github+json",
+}
+res = requests.get(url, headers=headers)
 
 releases = res.json()
 versions = [release["tag_name"] for release in releases]
@@ -48,7 +55,7 @@ if latest:
     os.remove("latest")
     os.symlink(f"{version}/bin/QuPath", "latest")
     os.chmod("latest", 0o755)
-    desktop=f"""
+    desktop = f"""
     [Desktop Entry]
     Encoding=UTF-8
     Version={version}
@@ -58,7 +65,9 @@ if latest:
     Name=QuPath
     Icon={os.path.realpath(f"{version}/lib/QuPath.png")}
     """
-    with open(os.path.expanduser("~/.local/share/applications/qupath.desktop"), "w") as f:
+    with open(
+        os.path.expanduser("~/.local/share/applications/qupath.desktop"), "w"
+    ) as f:
         f.write(desktop)
 
 
