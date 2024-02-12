@@ -60,6 +60,7 @@ if os.path.exists(version):
 
         os.system(f"rm -rf {version}")
         os.rename("QuPath", version)
+        os.system(f"chmod +x {version}/bin/QuPath")
 
         os.remove(tarfile)
         
