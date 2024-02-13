@@ -51,18 +51,20 @@ download_url = linux_asset[0]["browser_download_url"]
 if os.path.exists(version):
     if not args.force:
         print(f"Not overwriting existing download: {version}")
-    else:
-        print(f"Overwriting existing {version}")
-        tarfile = f"qupath-{version}.tar.xz"
-        wget.download(download_url, tarfile)
-        print("")
-        os.system(f"tar -xJf {tarfile}")
+    exit(0)
 
-        os.system(f"rm -rf {version}")
-        os.rename("QuPath", version)
-        os.system(f"chmod +x {version}/bin/QuPath")
 
-        os.remove(tarfile)
+print(f"Overwriting existing {version}")
+tarfile = f"qupath-{version}.tar.xz"
+wget.download(download_url, tarfile)
+print("")
+os.system(f"tar -xJf {tarfile}")
+
+os.system(f"rm -rf {version}")
+os.rename("QuPath", version)
+os.system(f"chmod +x {version}/bin/QuPath")
+
+os.remove(tarfile)
         
 
 if latest:
