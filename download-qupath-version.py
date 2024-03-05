@@ -12,14 +12,14 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "-f",
     "--force",
-    help = "Overwrite existing downloads",
-    default = False,
+    help="Overwrite existing downloads",
+    default=False,
 )
 parser.add_argument(
     "-v",
     "--version",
-    help = "The version to download, eg v0.4.3, latest",
-    default = "latest",
+    help="The version to download, eg v0.4.3, latest",
+    default="latest",
 )
 args = parser.parse_args()
 version = args.version
@@ -60,12 +60,12 @@ wget.download(download_url, tarfile)
 print("")
 os.system(f"tar -xJf {tarfile}")
 
-os.system(f"rm -rf {version}")
-os.rename("QuPath", version)
+os.rename(f"QuPath-{version}-Linux/QuPath", version)
+os.system(f"rm -rf QuPath-{version}-Linux")
 os.system(f"chmod +x {version}/bin/QuPath")
 
 os.remove(tarfile)
-        
+
 
 if latest:
     if os.path.exists("latest"):
@@ -85,7 +85,9 @@ if latest:
     """
     ## probably a better way to ensure there's no leading tabs, but...
     desktop = "\n".join([x.strip() for x in desktop.split("\n")])
-    with open(os.path.expanduser("~/.local/share/applications/qupath.desktop"), "w") as f:
+    with open(
+        os.path.expanduser("~/.local/share/applications/qupath.desktop"), "w"
+    ) as f:
         f.write(desktop)
 
 
