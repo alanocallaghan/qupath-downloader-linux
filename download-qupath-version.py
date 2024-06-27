@@ -12,17 +12,26 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "-f",
     "--force",
+    action="store_true",
     help="Overwrite existing downloads",
-    default=False,
+    default=False
+)
+parser.add_argument(
+    "-d",
+    "--desktop",
+    action="store_true",
+    help="Create desktop file",
+    default=False
 )
 parser.add_argument(
     "-v",
     "--version",
     help="The version to download, eg v0.4.3, latest",
-    default="latest",
+    default="latest"
 )
 args = parser.parse_args()
 version = args.version
+print(args)
 
 print(f"Downloading QuPath, version: {version}")
 
@@ -40,7 +49,7 @@ latest = version == "latest"
 if version == "latest":
     version = versions[0]
 else:
-    if not versions.contains(version):
+    if not version in versions:
         print("Version not found")
         sys.exit()
 
@@ -51,17 +60,22 @@ download_url = linux_asset[0]["browser_download_url"]
 if os.path.exists(version):
     if not args.force:
         print(f"Not overwriting existing download: {version}")
-    exit(0)
+        exit(0)
 
 
 print(f"Overwriting existing {version}")
-tarfile = f"qupath-{version}.tar.xz"
+os.system(f"rm -rf {version}")
+tarfile = f"QuPath-{version}.tar.xz"
 wget.download(download_url, tarfile)
 print("")
 os.system(f"tar -xJf {tarfile}")
 
-os.rename(f"QuPath-{version}-Linux/QuPath", version)
-os.system(f"rm -rf QuPath-{version}-Linux")
+if version == "v0.5.1":
+    os.rename(f"QuPath-{version}-Linux/QuPath", version)
+    os.system(f"rm -rf QuPath-{version}-Linux")
+else:
+    os.rename(f"QuPath", version)
+
 os.system(f"chmod +x {version}/bin/QuPath")
 
 os.remove(tarfile)
@@ -73,6 +87,7 @@ if latest:
     os.symlink(f"{version}", "latest")
     os.chmod("latest", 0o755)
 
+if args.desktop:
     desktop = f"""
     [Desktop Entry]
     Encoding=UTF-8
